@@ -7,6 +7,7 @@
  * @copyright by Rainbow
  */
  namespace App\Lib\Platform\Wxapi;
+
  class Card extends Base{
  	/**
  	 * 激活会员卡
@@ -105,5 +106,69 @@
  	public function getMemberCardActivateTempInfo($ticket){
  		$ticket = trim($ticket);
  		return $this->_apiPost(self::API_CARD_MEMBER_CARD_ACTIVATE_TEMP_INFO,['activate_ticket'=>$ticket]);
+ 	}
+
+ 	/**
+ 	 * 设置微信支付即会员规则
+ 	 * 参数详见说明 http://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1466494654_K9rNz&token=&lang=zh_CN 设置支付即会员部分
+ 	 *
+ 	 * @param $wxCardId string 微信卡模板id [卡券ID，仅支持非自定义code模式的card_id和预存code模式的card_id]
+ 	 * @param $jumpUrl string 模板消息跳转的url，可以是商户自定义的领卡网页链接
+ 	 * @param $aMchidList array 支持赠券规则的支付商户号列表
+ 	 * @param $aExtra array 其它字段 
+ 	 * begin_time:规则生效时间 end_time:规则结束时间 min_cost:本次规则生效支付金额下限，与分为单位 max_cost:本次规则生效支付金额上限，与分为单位
+ 	 * is_locked:是否允许其他appid设置本规则内已经设置过的商户号，默认为true 
+ 	 *
+ 	 * @author wadeyu
+ 	 * @return array 
+ 	 */
+ 	public function setPayGiftMemberCardRule($wxCardId,$jumpUrl,array $aMchidList = [],array $aExtra = []){
+ 		$wxCardId = trim($wxCardId);
+ 		$jumpUrl = trim($jumpUrl);
+ 		$aPost = [
+ 			'card_id' => $wxCardId,
+ 			'jump_url' => $jumpUrl, 
+ 			'mchid_list' => $aMchidList,
+ 		];
+ 		if($aExtra){
+ 			$aPost = array_merge($aPost,$aExtra);
+ 		}
+ 		return $this->_apiPost(self::API_CARD_PAYGIFTMEMBERCARD_ADD,$aPost);
+ 	}
+
+ 	/**
+ 	 * 删除微信支付即会员规则
+ 	 * 参数说明详见 http://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1466494654_K9rNz&token=&lang=zh_CN 删除支付即会员规则接口部分
+ 	 *
+ 	 * @param $wxCardId string 微信卡模板id 
+ 	 * @param $aMchidList array 本次删除的支付即会员的商户号列表
+ 	 *
+ 	 * @author wadeyu
+ 	 * @return array 
+ 	 */
+ 	public function deletePayGiftMemberCardRule($wxCardId,array $aMchidList = array()){
+ 		$wxCardId = trim($wxCardId);
+ 		$aPost = [
+ 			'card_id' => $wxCardId,
+ 			'mchid_list' => $aMchidList,
+ 		];
+ 		return $this->_apiPost(self::API_CARD_PAYGIFTMEMBERCARD_DELETE,$aPost);
+ 	}
+
+ 	/**
+ 	 * 查询微信支付即会员规则
+ 	 * 参数说明详见 http://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1466494654_K9rNz&token=&lang=zh_CN 查询支付即会员规则接口部分
+ 	 *
+ 	 * @param $mchid string 商户号
+ 	 *
+ 	 * @author wadeyu
+ 	 * @return array
+ 	 */
+ 	public function getPayGiftMemberCardRule($mchid){
+ 		$mchid = trim($mchid);
+ 		$aPost = [
+ 			'mchid' => $mchid,
+ 		];
+ 		return $this->_apiPost(self::API_CARD_PAYGIFTMEMBERCARD_GET,$aPost);
  	}
  }
