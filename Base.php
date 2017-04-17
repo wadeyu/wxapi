@@ -58,6 +58,47 @@ abstract class Base implements BaseInterface{
 		return $this->_apiPost(self::API_COMM_SHORT_URL,$aPost);
 	}
 
+	/**
+	 * 查询用户所在分组
+	 */
+	public function getUserGroup($openid){
+		$openid = trim($openid);
+		return $this->_apiPost('cgi-bin/groups/getid',['openid'=>$openid]);
+	}
+
+	/**
+	 * 查询所有分组列表
+	 */
+	public function getAllGroups(){
+		return $this->_apiGet('cgi-bin/groups/get');
+	}
+	
+	/**
+	 * 获取微信服务器ip地址列表
+	 */
+	public function getWxIps(){
+		return $this->_apiGet('cgi-bin/getcallbackip');
+	}
+	
+	/**
+	 * 查询用户基本信息
+	 *
+	 * @param array $aOpenids 待查询的openid列表
+	 *
+	 * @return array
+	 */
+	public function getUsersInfo(array $aOpenids){
+		$aPost = [];
+		foreach($aOpenids as $openid){
+			$aPost['user_list'][] = ['openid'=>$openid,'lang'=>'zh-CN'];
+		}
+		return $this->_apiPost(self::API_USER_INFO_BATCHGET,$aPost);
+	}
+	
+	public function getUserInfo($openid){
+		return $this->_apiGet('cgi-bin/user/info',['openid'=>$openid]);
+	}
+
 	public function isExecSuccess($errcode){
 		return $errcode == self::ERRCODE_SUCCESS;
 	}
@@ -92,7 +133,7 @@ abstract class Base implements BaseInterface{
         	}
     	}
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60); 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
 		if($aHeader){
@@ -132,7 +173,7 @@ abstract class Base implements BaseInterface{
 			return ['ret'=>false,'errno'=>9999,'error'=>'没有设置api接口凭证'];
 		}
 		$url = $this->_apiUrl . $api;
-		$sep = (strpos($api,'?') !== false) ? '?' : '&';
+		$sep = (strpos($api,'?') !== false) ? '&' : '?';
 		$url .= "{$sep}access_token={$accessToken}";
 		if($aData){
 			$tmp = http_build_query($aData);

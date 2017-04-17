@@ -171,4 +171,112 @@
  		];
  		return $this->_apiPost(self::API_CARD_PAYGIFTMEMBERCARD_GET,$aPost);
  	}
+
+ 	/**
+ 	 * 核销卡券
+ 	 *
+ 	 * @param string $code 券码
+ 	 * @param string $cardId 卡券id
+ 	 *
+ 	 * @return array
+ 	 */
+ 	public function consumeCode($code,$cardId){
+ 		$code = trim($code);
+ 		$cardId = trim($cardId);
+ 		$aPost = [
+ 			'code' => $code,
+ 			'card_id' => $cardId,
+ 		];
+ 		return $this->_apiPost(self::API_CARD_CODE_CONSUME,$aPost);
+ 	}
+
+ 	/**
+ 	 * 设置卡券失效
+ 	 *
+ 	 * @param string $code 券码
+ 	 * @param string $cardId 卡券id
+ 	 *
+ 	 * @return array
+ 	 */
+ 	public function disableCode($code,$cardId){
+ 		$code = trim($code);
+ 		$cardId = trim($cardId);
+ 		$aPost = [
+ 			'code' => $code,
+ 			'card_id' => $cardId,
+ 		];
+ 		return $this->_apiPost(self::API_CARD_CODE_UNAVAILABLE,$aPost);
+ 	}
+
+ 	/**
+ 	 * 创建卡券
+ 	 *
+ 	 * @param array $aPost 字段列表
+ 	 *
+ 	 * @return array
+ 	 */
+ 	public function createCard(array $aPost){
+ 		return $this->_apiPost(self::API_CARD_CREATE,$aPost);
+ 	}
+
+ 	/**
+ 	 * 导入code码
+ 	 *
+ 	 * @param string $cardId 卡券id
+ 	 * @param array $aCodes 券码列表
+ 	 *
+ 	 * @return array
+ 	 */
+ 	public function depositCode($cardId,$aCodes){
+ 		$aPost = ['card_id' => $cardId,'code'=>$aCodes];
+ 		return $this->_apiPost(self::API_CARD_CODE_DEPOSIT,$aPost);
+ 	}
+
+ 	/**
+ 	 * 查询导入code数量
+ 	 *
+ 	 * @param string $cardId 卡券id
+ 	 *
+ 	 * @return array
+ 	 */
+ 	public function getDepositCount($cardId){
+ 		$aPost = ['card_id' => $cardId];
+ 		return $this->_apiPost(self::API_CARD_CODE_GETDEPOSITCOUNT,$aPost);
+ 	}
+
+ 	/**
+ 	 * 核查导入的code
+ 	 *
+ 	 * @param string $cardId 卡券id
+ 	 *
+ 	 * @return array
+ 	 */
+ 	public function checkCode($cardId){
+ 		$aPost = ['card_id' => $cardId];
+ 		return $this->_apiPost(self::API_CARD_CODE_CHECK,$aPost);
+ 	}
+
+ 	/**
+ 	 * 修改库存
+ 	 *
+ 	 * @param string $cardId 卡券Id
+ 	 * @param int $num 库存数量 加减
+ 	 *
+ 	 * @return array
+ 	 */
+ 	public function modifyStock($cardId,$num){
+ 		$num = (int)$num;
+ 		if($num === 0){
+ 			return [];
+ 		}
+ 		$aPost = ['card_id' => $cardId];
+ 		if($num > 0){
+ 			$aPost['increase_stock_value'] = $num;
+ 		}else{
+ 			$aPost['reduce_stock_value'] = 0-$num;
+ 		}
+ 		return $this->_apiPost(self::API_CARD_MODIFY_STOCK,$aPost);
+ 	}
+
+
  }

@@ -24,7 +24,18 @@ interface BaseInterface{
 	const API_CARD_PAYGIFTMEMBERCARD_ADD =  'card/paygiftmembercard/add'; //增加支付即会员规则接口
 	const API_CARD_PAYGIFTMEMBERCARD_DELETE = 'card/paygiftmembercard/delete'; //删除支付即会员规则接口
 	const API_CARD_PAYGIFTMEMBERCARD_GET = 'card/paygiftmembercard/get'; //查询商户号支付即会员规则接口
+	const API_CARD_CODE_CONSUME = 'card/code/consume'; //核销优惠券
+	const API_CARD_CODE_UNAVAILABLE = 'card/code/unavailable'; //设置卡券失效
+	const API_CARD_CREATE = 'card/create'; //创建卡券
+	const API_CARD_CODE_DEPOSIT = 'card/code/deposit'; //导入code码
+	const API_CARD_CODE_GETDEPOSITCOUNT = 'card/code/getdepositcount'; //查询导入code数目接口
+	const API_CARD_CODE_CHECK = 'card/code/checkcode'; //核查code
+	const API_CARD_MODIFY_STOCK = 'card/modifystock'; //修改库存接口
 	//-----------------------------------------------------------------------------------------------------------------------
+	
+	//-----------------------------------------------------------------------------------------------------------------------
+	//用户信息相关
+	const API_USER_INFO_BATCHGET = 'cgi-bin/user/info/batchget'; //批量查询用户信息
 
 	//-----------------------------------------------------------------------------------------------------------------------
 	//接口调用凭据相关
