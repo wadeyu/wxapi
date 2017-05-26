@@ -13,6 +13,7 @@ abstract class Base implements BaseInterface{
 	protected $_apiUrl = 'https://api.weixin.qq.com/';
 	protected $_oauthUrl = '';
 	protected $_apiAccessToken = ''; //接口访问凭据
+	protected $_lastJsonData = ''; //最后一次执行的json数据
 	public function __construct($appid,$appsecret){
 		$this->_appid = $appid;
 		$this->_appsecret = $appsecret;
@@ -35,6 +36,15 @@ abstract class Base implements BaseInterface{
 		$url = $this->_apiUrl . self::API_API_ACCESS_TOKEN;
 		$url .= "?{$q}";
 		return $this->_get($url);
+	}
+
+	/**
+	 * 获取最后一次执行的json数据
+	 *
+	 * @return string
+	 */
+	public function getLastJsonData(){
+		return $this->_lastJsonData;
 	}
 
 	/**
@@ -119,6 +129,7 @@ abstract class Base implements BaseInterface{
 	 * @return array
 	 */
 	protected function _curl($url,array $data = array(),$method='GET',array $aHeader = array()){
+		$this->_lastJsonData = '';
 		$ret = false;
 		$st = microtime(true);
         $ch = curl_init($url);
@@ -129,6 +140,7 @@ abstract class Base implements BaseInterface{
         	if($data){
         		$aHeader[] = 'Content-Type:application/json';
         		$data = $this->_toJsonStr($data);
+        		$this->_lastJsonData = $data;
         		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         	}
     	}
