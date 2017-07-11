@@ -31,6 +31,8 @@ interface BaseInterface{
 	const API_CARD_CODE_GETDEPOSITCOUNT = 'card/code/getdepositcount'; //查询导入code数目接口
 	const API_CARD_CODE_CHECK = 'card/code/checkcode'; //核查code
 	const API_CARD_MODIFY_STOCK = 'card/modifystock'; //修改库存接口
+	const API_CARD_USER_GETCARDLIST = 'card/user/getcardlist'; //获取用户已领取卡券接口
+	const API_CARD_MEMBER_CARD_ACTIVATE_GETURL = 'card/membercard/activate/geturl'; //获取开卡插件参数
 	//-----------------------------------------------------------------------------------------------------------------------
 	
 	//-----------------------------------------------------------------------------------------------------------------------

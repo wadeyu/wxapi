@@ -278,5 +278,43 @@
  		return $this->_apiPost(self::API_CARD_MODIFY_STOCK,$aPost);
  	}
 
+ 	/**
+ 	 * 获取用户已领取卡券列表(包括已删除)
+ 	 *
+ 	 * @param string $openid openid
+ 	 * @param string $cardId 卡券id
+ 	 *
+ 	 * return array
+ 	 */
+ 	public function getUserCardList($openid,$cardId = ''){
+ 		$aPost = [
+ 			'openid' 	=> $openid,
+ 			'card_id'	=> $cardId,
+ 		];
+		if(!$cardId){
+			unset($aPost['card_id']);
+		}
+ 		return $this->_apiPost(self::API_CARD_USER_GETCARDLIST,$aPost);
+ 	}
+	
+	/**
+	 * 获取开卡插件参数
+	 * 文档地址 https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1499332673_Unm7V 见获取开卡插件参数部分
+	 *
+	 * @param string $cardId 卡券id
+	 * @param string $outStr 领取场景
+	 *
+	 * @return array
+	 */
+	public function getActivateUrl($cardId,$outStr = ''){
+		$aPost = [
+			'card_id' => $cardId,
+		];
+		if($outStr){
+			$aPost['outer_str'] = $outStr;
+		}
+		return $this->_apiPost(self::API_CARD_MEMBER_CARD_ACTIVATE_GETURL,$aPost);
+	}
+
 
  }
